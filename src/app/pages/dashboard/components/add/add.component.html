@@ -1,0 +1,131 @@
+<app-header></app-header>
+
+<div class="container-md shadow-lg m-2 mx-auto">
+    <div class="row bg-base">
+        <div class="col p-5">
+            <h1 class="text-base">Add Employee</h1>
+            <hr class="text-base" />
+        </div>
+    </div>
+    <div class="row bg-light justify-content-start p-5">
+        <ng-container *ngIf="message">
+            <div class="mt-4 alert {{
+            message.status ? 'alert-' + message.status : ''
+          }} fade show" role="alert">
+                {{ message.text }}
+                <button type="button" class="btn-close btn-sm float-end" data-bs-dismiss="alert"
+                    (click)="message = undefined" aria-label="Close"></button>
+            </div>
+        </ng-container>
+        <div class="col-md-6">
+            <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+                <div class="has-validation mb-3">
+                    <div class="mb-3">
+                        <label class="form-label">Username *</label>
+                        <input type="text" class="form-control" formControlName="username"
+                            [ngClass]="isFieldValid('username')" placeholder="Your Username" id="username"
+                            name="username" required />
+                        <span class="invalid-feedback"
+                            *ngIf="(employeeForm.touched || employeeForm.dirty) && employeeForm.controls?.['username']?.errors">Username
+                            field must be filled!</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">First Name *</label>
+                        <input type="text" class="form-control" formControlName="firstName"
+                            [ngClass]="isFieldValid('firstName')" placeholder="Your First Name" id="firstName"
+                            name="firstName" required />
+                        <span class="invalid-feedback"
+                            *ngIf="(employeeForm.touched || employeeForm.dirty) && employeeForm.controls?.['firstName']?.errors">First
+                            Name field must be filled!</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Last Name *</label>
+                        <input type="text" class="form-control" formControlName="lastName"
+                            [ngClass]="isFieldValid('lastName')" placeholder="Your Last Name" id="lastName"
+                            name="lastName" required />
+                        <span class="invalid-feedback"
+                            *ngIf="(employeeForm.touched || employeeForm.dirty) && employeeForm.controls?.['lastName']?.errors">Last
+                            Name field must be filled!</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email *</label>
+                        <input type="text" class="form-control" formControlName="email"
+                            [ngClass]="isFieldValid('email')" placeholder="Your Valid Email" id="email" name="email"
+                            required />
+                        <span class="invalid-feedback"
+                            *ngIf="(employeeForm.touched || employeeForm.dirty) && employeeForm.controls?.['email']?.errors">{{renderEmailErrMessage()}}</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Birth Date *</label>
+                        <div class="input-group date" id="datepicker">
+                            <input matInput [matDatepicker]="birthDate" required formControlName="birthDate"
+                                class="form-control">
+                            <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
+                            <mat-datepicker #birthDate></mat-datepicker>
+                        </div>
+                        <span class="invalid-feedback"
+                            *ngIf="(employeeForm.touched || employeeForm.dirty) && employeeForm.controls?.['birthDate']?.errors">Birth
+                            Date field must be filled!</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Basic Salary *</label>
+                        <input type="number" class="form-control" formControlName="basicSalary"
+                            [ngClass]="isFieldValid('basicSalary')" placeholder="Your Basic Salary" id="basicSalary"
+                            name="basicSalary" required />
+                        <span class="invalid-feedback"
+                            *ngIf="(employeeForm.touched || employeeForm.dirty) && employeeForm.controls?.['basicSalary']?.errors">Basic
+                            Salary field must be filled!</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status *</label>
+                        <select formControlName="status" id="status" class="form-select"
+                            [ngClass]="isFieldValid('status')" required>
+                            <option value="-" disabled selected>- Choose Status -</option>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                        <span class="invalid-feedback"
+                            *ngIf="(employeeForm.touched || employeeForm.dirty) && employeeForm.controls?.['status']?.errors">Status
+                            field must be filled!</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Group *</label>
+                        <input type="text" class="form-control" formControlName="group"
+                            [ngClass]="isFieldValid('group')" placeholder="Your Group" id="group" name="group"
+                            required />
+                        <span class="invalid-feedback"
+                            *ngIf="(employeeForm.touched || employeeForm.dirty) && employeeForm.controls?.['group']?.errors">Group
+                            field must be filled!</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description *</label>
+                        <textarea type="text" class="form-control" formControlName="description"
+                            [ngClass]="isFieldValid('description')" placeholder="Your Description" id="description"
+                            name="description" required rows="3"></textarea>
+                        <span class="invalid-feedback"
+                            *ngIf="(employeeForm.touched || employeeForm.dirty) && employeeForm.controls?.['description']?.errors">Description
+                            field must be filled!</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" [disabled]="employeeForm.invalid">
+                        Login
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#datepicker').datepicker();
+    });
+</script>

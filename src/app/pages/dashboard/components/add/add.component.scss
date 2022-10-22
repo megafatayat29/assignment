@@ -1,0 +1,19 @@
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+.register-content {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.bg-base {
+    background-color: aqua;
+}
+
+.input-group-append {
+    cursor: pointer;
+}
