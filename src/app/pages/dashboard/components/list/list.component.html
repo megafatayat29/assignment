@@ -18,8 +18,16 @@
             <div class="col-sm-10 bg-light">
                 <div class="table-responsive">
                     <nav class="navbar">
-                        <input class="form-control" type="text" name="nama" [(ngModel)]="nama"
-                            (ngModelChange)="searchVerif()" placeholder="Cari berdasarkan nama peserta">
+                        <div class="row">
+                            <div class="col-6">
+                                <input class="form-control" type="text" name="username" [(ngModel)]="username"
+                                    (ngModelChange)="searchByUsername()" placeholder="Search by Username">
+                            </div>
+                            <div class="col-6">
+                                <input class="form-control" type="text" name="first" [(ngModel)]="first"
+                                    (ngModelChange)="searchByFirstName()" placeholder="Search by First Name">
+                            </div>
+                        </div>
                     </nav>
                     <table class="table table-striped">
                         <thead>
@@ -34,31 +42,36 @@
                                 <th scope="col">Status</th>
                                 <th scope="col">Group</th>
                                 <th scope="col">Description</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <ng-container *ngIf="!loading; else isLoading">
                                 <ng-container *ngIf="employee.length > 0; else emptyData">
                                     <tr
-                                        *ngFor="let peserta of employee | paginate: { id: 'paging1', itemsPerPage: 5, currentPage: p }; let i = index">
+                                        *ngFor="let peserta of employee | paginate: { id: 'paging1', itemsPerPage: pageSize, currentPage: p, totalItems: count }; let i = index">
                                         <th scope="row">{{ i+((p-1)*5)+1 }}</th>
-                                        <!-- <td>{{ peserta.employee }}</td> -->
-                                        <!-- <td>{{ peserta.nama }}</td>
+                                        <td>{{ peserta.username }}</td>
+                                        <td>{{ peserta.firstName }}</td>
+                                        <td>{{ peserta.lastName }}</td>
                                         <td>{{ peserta.email }}</td>
-                                        <td>{{ peserta.alamat }}</td>
-                                        <td *ngIf="peserta.statusAnggota == '1'">Pengurus PC ISNU</td>
-                                        <td *ngIf="peserta.statusAnggota == '2'">Pengurus PAC ISNU</td>
-                                        <td *ngIf="peserta.statusAnggota == '3'">Anggota ISNU</td>
-                                        <td *ngIf="peserta.pendidikanTerakhir == '1'">S1</td>
-                                        <td *ngIf="peserta.pendidikanTerakhir == '2'">S2</td>
-                                        <td *ngIf="peserta.pendidikanTerakhir == '3'">S3</td>
-                                        <td>{{ peserta.universitas }}</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm mx-1"
-                                                (click)="onView(peserta.noPeserta)">
+                                        <td>{{ peserta.birthDate }}</td>
+                                        <td>{{ peserta.basicSalary }}</td>
+                                        <td *ngIf="peserta.status == true">Active</td>
+                                        <td *ngIf="peserta.status == false">Inactive</td>
+                                        <td>{{ peserta.group }}</td>
+                                        <td>{{ peserta.description }}</td>
+                                        <td style="min-width: 150px;">
+                                            <button class="btn btn-primary btn-sm mx-1" (click)="onView(peserta.id)">
                                                 <i class="fas fa-eye"></i>
                                             </button>
-                                        </td> -->
+                                            <button class="btn btn-warning btn-sm mx-1">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-sm mx-1">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 </ng-container>
                                 <ng-template #emptyData>
@@ -79,7 +92,20 @@
                             </ng-template>
                         </tbody>
                     </table>
-                    <!-- <pagination-controls id="paging1" (pageChange)="p = $event"></pagination-controls> -->
+                    <div class="row">
+                        <div class="col-6">
+                            <pagination-controls id="paging1" previousLabel="Prev" nextLabel="Next"
+                                (pageChange)="onTableDataChange($event)" [responsive]="true"></pagination-controls>
+                        </div>
+                        <div class="col-6">
+                            Items per Page:
+                            <select (change)="handlePageSizeChange($event)">
+                                <option *ngFor="let size of pageSizes" [ngValue]="size">
+                                    {{ size }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
 

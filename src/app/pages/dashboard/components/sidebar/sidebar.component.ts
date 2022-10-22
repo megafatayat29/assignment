@@ -12,4 +12,18 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  setSubmenuList(): void {
+    sessionStorage.removeItem('submenu');
+    sessionStorage.setItem('submenu', 'list')
+  }
+
+  setSubmenuVoting(): void {
+    sessionStorage.removeItem('submenu');
+    sessionStorage.setItem('submenu', 'voting')
+  }
+
+  setSubmenuAbsensi(): void {
+    sessionStorage.removeItem('submenu');
+    sessionStorage.setItem('submenu', 'absensi')
+  }
 }

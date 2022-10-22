@@ -18,8 +18,12 @@ export class ListComponent implements OnInit {
   loading: boolean = false;
   @Input() employee: Employee[] = [];
   message?: AlertMessage;
-  nama: any;
-  p: any = 1;
+  username: any;
+  first: any;
+  p: number = 1;
+  count: number = 0;
+  pageSize: number = 5;
+  pageSizes: any = [3, 6, 9, 12, 15, 18];
 
   constructor(
     private readonly router: Router,
@@ -41,8 +45,11 @@ export class ListComponent implements OnInit {
   getAll(): void {
     this.subscriber = {
       next: (resp: any) => {
-        console.log(resp);
-        console.log(resp.id);
+        for (let i = 0; i < resp.length; i++) {
+          const element = resp[i];
+          element.employee.id = element.id;
+          this.employee.push(element.employee);
+        }
       },
       error: console.error,
       complete: () => { this.loading = false },
@@ -53,17 +60,38 @@ export class ListComponent implements OnInit {
       .subscribe(this.subscriber);
   }
 
-  searchVerif() {
-    if (this.nama == "") {
+  searchByUsername() {
+    if (this.username == "") {
       this.ngOnInit();
     } else {
       this.employee = this.employee.filter(res => {
-        // return res.nama.toLocaleLowerCase().match(this.nama.toLocaleLowerCase())
+        return res.username.toLocaleLowerCase().match(this.username.toLocaleLowerCase())
       })
     }
   }
 
-  onView(noPeserta: string): void {
-    this.router.navigateByUrl(`/account/${noPeserta}`);
+  searchByFirstName() {
+    if (this.first == "") {
+      this.ngOnInit();
+    } else {
+      this.employee = this.employee.filter(res => {
+        return res.username.toLocaleLowerCase().match(this.first.toLocaleLowerCase())
+      })
+    }
+  }
+
+  onTableDataChange(event: any) {
+    this.p = event;
+    this.getAll();
+  }
+
+  handlePageSizeChange(event: any): void {
+    this.pageSize = event.target.value;
+    this.p = 1;
+    this.getAll();
+  }
+
+  onView(idEmployee: string): void {
+    this.router.navigateByUrl(`/account/${idEmployee}`);
   }
 }
