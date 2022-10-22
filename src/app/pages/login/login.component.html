@@ -1,0 +1,50 @@
+<app-header></app-header>
+
+<div class="container-md shadow-lg m-2 mx-auto">
+    <div class="row bg-base">
+        <div class="col p-5">
+            <h1 class="text-base">Login Admin Page</h1>
+            <h3>Panitia Konvercab V PC ISNU Surabaya</h3>
+            <hr class="text-base" />
+        </div>
+    </div>
+    <div class="row bg-light justify-content-start p-5">
+        <ng-container *ngIf="message">
+            <div class="mt-4 alert {{
+            message.status ? 'alert-' + message.status : ''
+          }} fade show" role="alert">
+                {{ message.text }}
+                <button type="button" class="btn-close btn-sm float-end" data-bs-dismiss="alert"
+                    (click)="message = undefined" aria-label="Close"></button>
+            </div>
+        </ng-container>
+        <div class="col-md-6">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <div class="has-validation mb-3">
+                    <div class="mb-3">
+                        <label class="form-label">Username *</label>
+                        <input type="text" class="form-control" formControlName="username"
+                            [ngClass]="isFieldValid('username')" placeholder="Masukkan username anda" id="username"
+                            name="username" required />
+                        <span class="invalid-feedback"
+                            *ngIf="(loginForm.touched || loginForm.dirty) && loginForm.controls?.['username']?.errors">Username
+                            harus diisi</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password *</label>
+                        <input type="password" class="form-control" formControlName="password"
+                            [ngClass]="isFieldValid('password')" placeholder="Masukkan password anda" id="password"
+                            name="password" required />
+                        <span class="invalid-feedback"
+                            *ngIf="(loginForm.touched || loginForm.dirty) && loginForm.controls?.['password']?.errors">{{renderPassErrMessage()}}</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">
+                        Login
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
