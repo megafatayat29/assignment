@@ -1,0 +1,102 @@
+<app-header></app-header>
+
+<ng-container *ngIf="admin; else notAdmin">
+    <div class="container-md shadow-lg m-2 mx-auto">
+        <div class="row bg-base">
+            <div class="col p-5">
+                <h1 class="text-base">Dashboard Admin Page</h1>
+                <hr class="text-base" />
+            </div>
+        </div>
+
+        <div class="row">
+
+            <aside class="col-sm-2">
+                <app-sidebar></app-sidebar>
+            </aside>
+
+            <div class="col-sm-10 bg-light">
+                <div class="table-responsive">
+                    <nav class="navbar">
+                        <input class="form-control" type="text" name="nama" [(ngModel)]="nama"
+                            (ngModelChange)="searchVerif()" placeholder="Cari berdasarkan nama peserta">
+                    </nav>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Birth Date</th>
+                                <th scope="col">Basic Salary</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Group</th>
+                                <th scope="col">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="!loading; else isLoading">
+                                <ng-container *ngIf="employee.length > 0; else emptyData">
+                                    <tr
+                                        *ngFor="let peserta of employee | paginate: { id: 'paging1', itemsPerPage: 5, currentPage: p }; let i = index">
+                                        <th scope="row">{{ i+((p-1)*5)+1 }}</th>
+                                        <!-- <td>{{ peserta.employee }}</td> -->
+                                        <!-- <td>{{ peserta.nama }}</td>
+                                        <td>{{ peserta.email }}</td>
+                                        <td>{{ peserta.alamat }}</td>
+                                        <td *ngIf="peserta.statusAnggota == '1'">Pengurus PC ISNU</td>
+                                        <td *ngIf="peserta.statusAnggota == '2'">Pengurus PAC ISNU</td>
+                                        <td *ngIf="peserta.statusAnggota == '3'">Anggota ISNU</td>
+                                        <td *ngIf="peserta.pendidikanTerakhir == '1'">S1</td>
+                                        <td *ngIf="peserta.pendidikanTerakhir == '2'">S2</td>
+                                        <td *ngIf="peserta.pendidikanTerakhir == '3'">S3</td>
+                                        <td>{{ peserta.universitas }}</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm mx-1"
+                                                (click)="onView(peserta.noPeserta)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td> -->
+                                    </tr>
+                                </ng-container>
+                                <ng-template #emptyData>
+                                    <tr>
+                                        <td colspan="10" class="text-center">Belum ada data</td>
+                                    </tr>
+                                </ng-template>
+                            </ng-container>
+                            <ng-template #isLoading>
+                                <div class="container p-5">
+                                    <li class="list-group-item">
+                                        <span class="d-flex align-items-center">
+                                            <strong>Loading....</strong>
+                                            <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+                                        </span>
+                                    </li>
+                                </div>
+                            </ng-template>
+                        </tbody>
+                    </table>
+                    <!-- <pagination-controls id="paging1" (pageChange)="p = $event"></pagination-controls> -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</ng-container>
+<ng-template #notAdmin>
+    <div class="container-md shadow-lg m-2 mx-auto">
+        <div class="row bg-base">
+            <div class="col p-5">
+                <h1 class="text-base">Maaf!</h1>
+                <h3>Hanya Admin Yang Boleh Mengakses Halaman Ini</h3>
+                <hr class="text-base" />
+            </div>
+        </div>
+
+        <div class="row bg-light">
+        </div>
+    </div>
+</ng-template>
