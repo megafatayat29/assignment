@@ -23,7 +23,7 @@ export class ListComponent implements OnInit {
   p: number = 1;
   count: number = 0;
   pageSize: number = 5;
-  pageSizes: any = [3, 6, 9, 12, 15, 18];
+  pageSizes: any = [5, 10, 15, 20];
 
   constructor(
     private readonly router: Router,
