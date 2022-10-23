@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EMPTY, map, Observable, Subject } from 'rxjs';
+import { Employee } from 'src/app/shared/models/employee';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,13 @@ export class EmployeeService {
 
   public getAll(): Observable<any> {
     return this.http.get<any>('https://63538223e64783fa82742172.mockapi.io/api/assignment/employees');
+  }
+
+  save(employee: Employee): Observable<any> {
+    return this.http.post<any>(`https://63538223e64783fa82742172.mockapi.io/api/assignment/employees`, employee)
+      .pipe(
+        map(() => this.employeeSubject.next(true))
+      )
   }
 
 }

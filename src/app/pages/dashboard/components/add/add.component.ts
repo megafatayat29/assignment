@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/fo
 import { Router } from '@angular/router';
 import { AlertMessage } from 'src/app/shared/models/alert-message-interface';
 import { Employee } from 'src/app/shared/models/employee';
+import { EmployeeService } from '../list/service/employee.service';
 
 @Component({
   selector: 'app-add',
@@ -12,7 +13,7 @@ import { Employee } from 'src/app/shared/models/employee';
 export class AddComponent implements OnInit {
 
   loading: boolean = false;
-  loginAdmin!: Employee;
+  employee!: Employee;
   message?: AlertMessage;
 
   employeeForm: FormGroup = new FormGroup({
@@ -27,42 +28,42 @@ export class AddComponent implements OnInit {
     description: new FormControl(null, [Validators.required]),
   })
 
-  constructor(private readonly router: Router) { }
+  constructor(
+    private readonly router: Router,
+    private readonly employeeService: EmployeeService
+  ) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
     this.loading = true;
-    const loginAdmin: Employee = this.employeeForm.value;
-    if (this.employeeForm.value.username === "alFaqir") {
-      if (this.employeeForm.value.password === "H@sbiRobbi") {
-        sessionStorage.setItem('username', loginAdmin.username);
-        sessionStorage.setItem('submenu', 'list');
+    const employee: Employee = this.employeeForm.value;
 
-        this.message = {
-          status: 'success',
-          text: `Selamat, ${loginAdmin.username} berhasil login!`
+    this.employeeService.save(employee)
+      .subscribe(
+        {
+          next: (value: any) => {
+            this.onReset();
+            this.message = {
+              status: 'success',
+              text: `Congrats, ${employee.firstName} has been registered!`
+            }
+          },
+          error: (error: any) => {
+            console.log(error);
+            this.message = {
+              status: 'danger',
+              text: error.error ? error.error.message : error.message
+            }
+          },
+          complete: () => this.loading = false
         }
-      } else {
-        this.message = {
-          status: 'warning',
-          text: `Maaf, ${loginAdmin.username}. Password salah.`
-        }
-      }
-    } else {
-      this.message = {
-        status: 'danger',
-        text: `Maaf, ${loginAdmin.username} tidak terdaftar sebagai admin`
-      }
-    }
+      );
 
     setTimeout(() => {
       this.message = undefined;
     }, 10000);
-
-    this.onReset();
-    this.router.navigateByUrl('/dashboard/list');
   }
 
   onReset(): void {
